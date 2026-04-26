@@ -1,0 +1,603 @@
+6:00:58 PM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+6:00:58 PM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
+Both esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored. The following esbuild options were set: `{ jsx: 'automatic', jsxImportSource: undefined }`
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.5 [39m[90m/app[39m
+
+ [32m✓[39m src/core/services/http.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m src/core/services/auth.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 243[2mms[22m[39m
+[90mstderr[2m | src/shared/protected-route/ProtectedRoute.test.tsx[2m > [22m[2mProtectedRoute[2m > [22m[2mshould show loader when loading
+[22m[39m⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/shared/protected-route/ProtectedRoute.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+[90mstderr[2m | src/shared/header/Header.test.tsx[2m > [22m[2mHeader[2m > [22m[2mshould show app title
+[22m[39m⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+[90mstderr[2m | src/views/documents/DocumentsPage.test.tsx[2m > [22m[2mDocumentsPage[2m > [22m[2mshould show empty message when no content
+[22m[39m⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/shared/header/Header.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+[90mstderr[2m | src/views/groups/GroupsPage.test.tsx[2m > [22m[2mGroupsPage[2m > [22m[2mshould show loader then groups
+[22m[39m⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/views/groups/GroupsPage.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 824[2mms[22m[39m
+     [33m[2m✓[22m[39m should create a group [33m 655[2mms[22m[39m
+ [31m❯[39m src/views/documents/DocumentsPage.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 1796[2mms[22m[39m
+     [32m✓[39m should show empty message when no content[32m 100[2mms[22m[39m
+     [32m✓[39m should show documents and folders at root[32m 58[2mms[22m[39m
+[31m     [31m×[31m should navigate into folder when clicked[39m[33m 1266[2mms[22m[39m
+     [32m✓[39m should show breadcrumbs when inside folder[32m 48[2mms[22m[39m
+     [32m✓[39m should create a new folder[32m 138[2mms[22m[39m
+[31m     [31m×[31m should create a document in current folder[39m[32m 119[2mms[22m[39m
+     [32m✓[39m should delete a folder[32m 37[2mms[22m[39m
+[31m     [31m×[31m should navigate to document on click[39m[32m 23[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/views/documents/DocumentsPage.test.tsx[2m > [22mDocumentsPage[2m > [22mshould navigate into folder when clicked
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: Sous-dossier. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body[39m
+  [33mclass[39m=[32m"g-root g-root_theme_light"[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"documents-page"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"documents-page__header"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"g-text g-text_variant_header-1"[39m
+        [36m>[39m
+          [0mDocuments[0m
+        [36m</span>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"documents-page__header-actions"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"g-button g-button_view_outlined g-button_size_l g-button_pin_round-round"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"g-button__icon g-button__icon_side_start"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__icon-inner"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"g-icon"[39m
+                  [33mfill[39m=[32m"currentColor"[39m
+                  [33mheight[39m=[32m"16"[39m
+                  [33mstroke[39m=[32m"none"[39m
+                  [33mwidth[39m=[32m"16"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mviewBox[39m=[32m"0 0 16 16"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33mclip-rule[39m=[32m"evenodd"[39m
+                      [33md[39m=[32m"m6.44 4.06.439.44H12.5A1.5 1.5 0 0 1 14 6v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V4.5A1.5 1.5 0 0 1 3.5 3h1.257a1.5 1.5 0 0 1 1.061.44zM.5 4.5a3 3 0 0 1 3-3h1.257a3 3 0 0 1 2.122.879L7.5 3h5a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zm8.25 2a.75.75 0 1 0-1.5 0v1.25H6a.75.75 0 1 0 0 1.5h1.25v1.25a.75.75 0 0 0 1.5 0V9.25H10a.75.75 0 0 0 0-1.5H8.75z"[39m
+                      [33mfill[39m=[32m"currentColor"[39m
+                      [33mfill-rule[39m=[32m"evenodd"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"g-button__text"[39m
+            [36m>[39m
+              [0mNouveau dossier[0m
+            [36m</span>[39m
+          [36m</button>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"g-button g-button_view_action g-button_size_l g-button_pin_round-round"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"g-button__icon g-button__icon_side_start"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__icon-inner"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"g-icon"[39m
+                  [33mfill[39m=[32m"currentColor"[39m
+                  [33mheight[39m=[32m"16"[39m
+                  [33mstroke[39m=[32m"none"[39m
+                  [33mwidth[39m=[32m"16"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mviewBox[39m=[32m"0 0 16 16"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33mclip-rule[39m=[32m"evenodd"[39m
+                      [33md[39m=[32m"M8 1.75a.75.75 0 0 1 .75.75v4.75h4.75a.75.75 0 0 1 0 1.5H8.75v4.75a.75.75 0 0 1-1.5 0V8.75H2.5a.75.75 0 0 1 0-1.5h4.75V2.5A.75.75 0 0 1 8 1.75"[39m
+                      [33mfill[39m=[32m"currentColor"[39m
+                      [33mfill-rule[39m=[32m"evenodd"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"g-button__text"[39m
+            [36m>[39m
+              [0mNouveau document[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"documents-page__breadcrumbs"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"g-button g-button_view_flat g-button_size_s g-button_pin_round-round g-button_disabled"[39m
+          [33mdisabled[39m=[32m""[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"g-button__text"[39m
+          [36m>[39m
+            [0mRacine[0m
+          [36m</span>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"documents-page__list"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"g-box g-card g-card_theme_normal g-card_view_outlined g-card_type_container g-card_size_m document-card document-card--folder"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"document-card__content"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"document-card__title-row"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"g-icon"[39m
+                [33mfill[39m=[32m"currentColor"[39m
+                [33mheight[39m=[32m"18"[39m
+                [33mstroke[39m=[32m"none"[39m
+                [33mwidth[39m=[32m"18"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33mfill[39m=[32m"none"[39m
+                  [33mviewBox[39m=[32m"0 0 16 16"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33mclip-rule[39m=[32m"evenodd"[39m
+                    [33md[39m=[32m"m6.44 4.06.439.44H12.5A1.5 1.5 0 0 1 14 6v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V4.5A1.5 1.5 0 0 1 3.5 3h1.257a1.5 1.5 0 0 1 1.061.44zM.5 4.5a3 3 0 0 1 3-3h1.257a3 3 0 0 1 2.122.879L7.5 3h5a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zm4.25 2a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5z"[39m
+                    [33mfill[39m=[32m"currentColor"[39m
+                    [33mfill-rule[39m=[32m"evenodd"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</svg>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-text g-text_variant_subheader-2"[39m
+              [36m>[39m
+                [0mMon dossier[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"g-text g-text_variant_caption-2 g-color-text g-color-text_color_secondary"[39m
+            [36m>[39m
+              [0mModifié le [0m
+              [0m01/01/2025[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"document-card__actions"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"g-button g-button_view_flat g-button_size_s g-button_pin_round-round"[39m
+              [33mtitle[39m=[32m"Déplacer"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__icon"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-button__icon-inner"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"g-icon"[39m
+                    [33mfill[39m=[32m"currentColor"[39m
+                    [33mheight[39m=[32m"14"[39m
+                    [33mstroke[39m=[32m"none"[39m
+                    [33mwidth[39m=[32m"14"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mviewBox[39m=[32m"0 0 16 16"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33mclip-rule[39m=[32m"evenodd"[39m
+                        [33md[39m=[32m"M1.25 8A.75.75 0 0 1 2 7.25h10.19L9.47 4.53a.75.75 0 0 1 1.06-1.06l4 4a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 1 1-1.06-1.06l2.72-2.72H2A.75.75 0 0 1 1.25 8"[39m
+                        [33mfill[39m=[32m"currentColor"[39m
+                        [33mfill-rule[39m=[32m"evenodd"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"g-button g-button_view_flat g-button_size_s g-button_pin_round-round"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__icon"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-button__icon-inner"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"g-icon"[39m
+                    [33mfill[39m=[32m"currentColor"[39m
+                    [33mheight[39m=[32m"14"[39m
+                    [33mstroke[39m=[32m"none"[39m
+                    [33mwidth[39m=[32m"14"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mviewBox[39m=[32m"0 0 16 16"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33mclip-rule[39m=[32m"evenodd"[39m
+                        [33md[39m=[32m"M9 2H7a.5.5 0 0 0-.5.5V3h3v-.5A.5.5 0 0 0 9 2m2 1v-.5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2V3H2.251a.75.75 0 0 0 0 1.5h.312l.317 7.625A3 3 0 0 0 5.878 15h4.245a3 3 0 0 0 2.997-2.875l.318-7.625h.312a.75.75 0 0 0 0-1.5zm.936 1.5H4.064l.315 7.562A1.5 1.5 0 0 0 5.878 13.5h4.245a1.5 1.5 0 0 0 1.498-1.438zm-6.186 2v5a.75.75 0 0 0 1.5 0v-5a.75.75 0 0 0-1.5 0m3.75-.75a.75.75 0 0 1 .75.75v5a.75.75 0 0 1-1.5 0v-5a.75.75 0 0 1 .75-.75"[39m
+                        [33mfill[39m=[32m"currentColor"[39m
+                        [33mfill-rule[39m=[32m"evenodd"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mclass[39m=[32m"g-root g-root_theme_light"[39m
+  [36m>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"documents-page"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"documents-page__header"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"g-text g-text_variant_header-1"[39m
+          [36m>[39m
+            [0mDocuments[0m
+          [36m</span>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"documents-page__header-actions"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"g-button g-button_view_outlined g-button_size_l g-button_pin_round-round"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__icon g-button__icon_side_start"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-button__icon-inner"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"g-icon"[39m
+                    [33mfill[39m=[32m"currentColor"[39m
+                    [33mheight[39m=[32m"16"[39m
+                    [33mstroke[39m=[32m"none"[39m
+                    [33mwidth[39m=[32m"16"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mviewBox[39m=[32m"0 0 16 16"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33mclip-rule[39m=[32m"evenodd"[39m
+                        [33md[39m=[32m"m6.44 4.06.439.44H12.5A1.5 1.5 0 0 1 14 6v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V4.5A1.5 1.5 0 0 1 3.5 3h1.257a1.5 1.5 0 0 1 1.061.44zM.5 4.5a3 3 0 0 1 3-3h1.257a3 3 0 0 1 2.122.879L7.5 3h5a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zm8.25 2a.75.75 0 1 0-1.5 0v1.25H6a.75.75 0 1 0 0 1.5h1.25v1.25a.75.75 0 0 0 1.5 0V9.25H10a.75.75 0 0 0 0-1.5H8.75z"[39m
+                        [33mfill[39m=[32m"currentColor"[39m
+                        [33mfill-rule[39m=[32m"evenodd"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__text"[39m
+              [36m>[39m
+                [0mNouveau dossier[0m
+              [36m</span>[39m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"g-button g-button_view_action g-button_size_l g-button_pin_round-round"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__icon g-button__icon_side_start"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-button__icon-inner"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"g-icon"[39m
+                    [33mfill[39m=[32m"currentColor"[39m
+                    [33mheight[39m=[32m"16"[39m
+                    [33mstroke[39m=[32m"none"[39m
+                    [33mwidth[39m=[32m"16"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33mfill[39m=[32m"none"[39m
+                      [33mviewBox[39m=[32m"0 0 16 16"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                    [36m>[39m
+                      [36m<path[39m
+                        [33mclip-rule[39m=[32m"evenodd"[39m
+                        [33md[39m=[32m"M8 1.75a.75.75 0 0 1 .75.75v4.75h4.75a.75.75 0 0 1 0 1.5H8.75v4.75a.75.75 0 0 1-1.5 0V8.75H2.5a.75.75 0 0 1 0-1.5h4.75V2.5A.75.75 0 0 1 8 1.75"[39m
+                        [33mfill[39m=[32m"currentColor"[39m
+                        [33mfill-rule[39m=[32m"evenodd"[39m
+                      [36m/>[39m
+                    [36m</svg>[39m
+                  [36m</svg>[39m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-button__text"[39m
+              [36m>[39m
+                [0mNouveau document[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"documents-page__breadcrumbs"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"g-button g-button_view_flat g-button_size_s g-button_pin_round-round g-button_disabled"[39m
+            [33mdisabled[39m=[32m""[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"g-button__text"[39m
+            [36m>[39m
+              [0mRacine[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"documents-page__list"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"g-box g-card g-card_theme_normal g-card_view_outlined g-card_type_container g-card_size_m document-card document-card--folder"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"document-card__content"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"document-card__title-row"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"g-icon"[39m
+                  [33mfill[39m=[32m"currentColor"[39m
+                  [33mheight[39m=[32m"18"[39m
+                  [33mstroke[39m=[32m"none"[39m
+                  [33mwidth[39m=[32m"18"[39m
+                  [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mviewBox[39m=[32m"0 0 16 16"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33mclip-rule[39m=[32m"evenodd"[39m
+                      [33md[39m=[32m"m6.44 4.06.439.44H12.5A1.5 1.5 0 0 1 14 6v5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11V4.5A1.5 1.5 0 0 1 3.5 3h1.257a1.5 1.5 0 0 1 1.061.44zM.5 4.5a3 3 0 0 1 3-3h1.257a3 3 0 0 1 2.122.879L7.5 3h5a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3zm4.25 2a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5z"[39m
+                      [33mfill[39m=[32m"currentColor"[39m
+                      [33mfill-rule[39m=[32m"evenodd"[39m
+                    [36m/>[39m
+                  [36m</svg>[39m
+                [36m</svg>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-text g-text_variant_subheader-2"[39m
+                [36m>[39m
+                  [0mMon dossier[0m
+                [36m</span>[39m
+              [36m</div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"g-text g-text_variant_caption-2 g-color-text g-color-text_color_secondary"[39m
+              [36m>[39m
+                [0mModifié le [0m
+                [0m01/01/2025[0m
+              [36m</span>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"document-card__actions"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"g-button g-button_view_flat g-button_size_s g-button_pin_round-round"[39m
+                [33mtitle[39m=[32m"Déplacer"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-button__icon"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"g-button__icon-inner"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"g-icon"[39m
+                      [33mfill[39m=[32m"currentColor"[39m
+                      [33mheight[39m=[32m"14"[39m
+                      [33mstroke[39m=[32m"none"[39m
+                      [33mwidth[39m=[32m"14"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mviewBox[39m=[32m"0 0 16 16"[39m
+                        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [36m>[39m
+                        [36m<path[39m
+                          [33mclip-rule[39m=[32m"evenodd"[39m
+                          [33md[39m=[32m"M1.25 8A.75.75 0 0 1 2 7.25h10.19L9.47 4.53a.75.75 0 0 1 1.06-1.06l4 4a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 1 1-1.06-1.06l2.72-2.72H2A.75.75 0 0 1 1.25 8"[39m
+                          [33mfill[39m=[32m"currentColor"[39m
+                          [33mfill-rule[39m=[32m"evenodd"[39m
+                        [36m/>[39m
+                      [36m</svg>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                [36m</span>[39m
+              [36m</button>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"g-button g-button_view_flat g-button_size_s g-button_pin_round-round"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"g-button__icon"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"g-button__icon-inner"[39m
+                  [36m>[39m
+                    [36m<svg[39m
+                      [33maria-hidden[39m=[32m"true"[39m
+                      [33mclass[39m=[32m"g-icon"[39m
+                      [33mfill[39m=[32m"currentColor"[39m
+                      [33mheight[39m=[32m"14"[39m
+                      [33mstroke[39m=[32m"none"[39m
+                      [33mwidth[39m=[32m"14"[39m
+                      [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [33mxmlns:xlink[39m=[32m"http://www.w3.org/1999/xlink"[39m
+                    [36m>[39m
+                      [36m<svg[39m
+                        [33mfill[39m=[32m"none"[39m
+                        [33mviewBox[39m=[32m"0 0 16 16"[39m
+                        [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                      [36m>[39m
+                        [36m<path[39m
+                          [33mclip-rule[39m=[32m"evenodd"[39m
+                          [33md[39m=[32m"M9 2H7a.5.5 0 0 0-.5.5V3h3v-.5A.5.5 0 0 0 9 2m2 1v-.5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2V3H2.251a.75.75 0 0 0 0 1.5h.312l.317 7.625A3 3 0 0 0 5.878 15h4.245a3 3 0 0 0 2.997-2.875l.318-7.625h.312a.75.75 0 0 0 0-1.5zm.936 1.5H4.064l.315 7.562A1.5 1.5 0 0 0 5.878 13.5h4.245a1.5 1.5 0 0 0 1.498-1.438zm-6.186 2v5a.75.75 0 0 0 1.5 0v-5a.75.75 0 0 0-1.5 0m3.75-.75a.75.75 0 0 1 .75.75v5a.75.75 0 0 1-1.5 0v-5a.75.75 0 0 1 .75-.75"[39m
+                          [33mfill[39m=[32m"currentColor"[39m
+                          [33mfill-rule[39m=[32m"evenodd"[39m
+                        [36m/>[39m
+                      [36m</svg>[39m
+                    [36m</svg>[39m
+                  [36m</span>[39m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+[90m [2m❯[22m Proxy.waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[36m [2m❯[22m src/views/documents/DocumentsPage.test.tsx:[2m118:11[22m[39m
+    [90m116|[39m
+    [90m117|[39m     [90m// Now we should see the subfolder and doc inside folder[39m
+    [90m118|[39m     [35mawait[39m [34mwaitFor[39m(() [33m=>[39m {
+    [90m   |[39m           [31m^[39m
+    [90m119|[39m       [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Sous-dossier'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m120|[39m       [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Doc in Folder'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/views/documents/DocumentsPage.test.tsx[2m > [22mDocumentsPage[2m > [22mshould create a document in current folder
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ '/api/documents', …(1) ][90m
+
+Received:
+
+[1m  1st vi.fn() call:
+
+[22m[2m  [[22m
+[2m    "/api/documents",[22m
+[2m    {[22m
+[32m-     "folderId": "f1",[90m
+[2m      "title": "Mon doc",[22m
+[2m    },[22m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/views/documents/DocumentsPage.test.tsx:[2m185:22[22m[39m
+    [90m183|[39m     [35mawait[39m userEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([32m'Créer'[39m))[33m;[39m
+    [90m184|[39m
+    [90m185|[39m     [34mexpect[39m(api[33m.[39mpost)[33m.[39m[34mtoHaveBeenCalledWith[39m([32m'/api/documents'[39m[33m,[39m {
+    [90m   |[39m                      [31m^[39m
+    [90m186|[39m       title[33m:[39m [32m'Mon doc'[39m[33m,[39m
+    [90m187|[39m       folderId[33m:[39m [32m'f1'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/views/documents/DocumentsPage.test.tsx[2m > [22mDocumentsPage[2m > [22mshould navigate to document on click
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ '/documents/d1' ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/views/documents/DocumentsPage.test.tsx:[2m226:26[22m[39m
+    [90m224|[39m     [35mawait[39m userEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([32m'Test Doc'[39m))[33m;[39m
+    [90m225|[39m
+    [90m226|[39m     [34mexpect[39m(mockNavigate)[33m.[39m[34mtoHaveBeenCalledWith[39m([32m'/documents/d1'[39m)[33m;[39m
+    [90m   |[39m                          [31m^[39m
+    [90m227|[39m   })[33m;[39m
+    [90m228|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (27)[39m
+[2m   Start at [22m 18:00:58
+[2m   Duration [22m 12.99s[2m (transform 20.18s, setup 1.23s, import 33.21s, tests 3.14s, environment 13.72s)[22m
+

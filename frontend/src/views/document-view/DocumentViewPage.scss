@@ -1,0 +1,44 @@
+.document-view {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+  }
+
+  &__not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 100px;
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 60px;
+  }
+
+  &__content {
+    .g-md-editor__toolbar {
+      display: none;
+    }
+
+    .ProseMirror {
+      pointer-events: none;
+    }
+  }
+}
