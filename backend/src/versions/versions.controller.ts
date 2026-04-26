@@ -15,16 +15,16 @@ import {
 import { VersionsService } from './versions.service';
 import { CreateVersionDto } from './dto/create-version.dto';
 import { UpdateVersionDto } from './dto/update-version.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard, OptionalJwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PermissionsGuard, RequirePermission } from '../permissions/permissions.guard';
 import { Request } from 'express';
 
 @Controller('documents/:documentId/versions')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class VersionsController {
   constructor(private readonly versionsService: VersionsService) {}
 
   @Get()
+  @UseGuards(OptionalJwtAuthGuard, PermissionsGuard)
   @RequirePermission('versions', 'read')
   findAll(@Param('documentId', new ParseUUIDPipe()) documentId: string) {
     return this.versionsService.findAll(documentId);
@@ -32,6 +32,7 @@ export class VersionsController {
 
   @Post()
   @HttpCode(201)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermission('versions', 'create')
   create(
     @Param('documentId', new ParseUUIDPipe()) documentId: string,
@@ -43,6 +44,7 @@ export class VersionsController {
   }
 
   @Get(':versionId')
+  @UseGuards(OptionalJwtAuthGuard, PermissionsGuard)
   @RequirePermission('versions', 'read')
   findOne(
     @Param('documentId', new ParseUUIDPipe()) documentId: string,
@@ -52,6 +54,7 @@ export class VersionsController {
   }
 
   @Put(':versionId')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermission('versions', 'update')
   update(
     @Param('documentId', new ParseUUIDPipe()) documentId: string,
@@ -63,6 +66,7 @@ export class VersionsController {
 
   @Delete(':versionId')
   @HttpCode(204)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermission('versions', 'delete')
   remove(
     @Param('documentId', new ParseUUIDPipe()) documentId: string,
@@ -72,6 +76,7 @@ export class VersionsController {
   }
 
   @Patch(':versionId/validate')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermission('versions', 'update')
   validate(
     @Param('documentId', new ParseUUIDPipe()) documentId: string,

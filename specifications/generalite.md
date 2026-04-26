@@ -11,10 +11,21 @@ Elle permet de :
 Un document est composé d'un ensemble de versions.
 Il doit y avoir une seule version valide par document.
 
+si une version est active, il est possible de la consulter sans connaitre cette version.
+Une mèthode d'appel permet de consulter la version active du document sans connaitre quelle est cette version.
+elle repond sur l'api /documents/{documentId}/current et renvoie directement le markdown.
+Lors d'un click sur le document, la consultation de la version courante s'affiche.
+
 Les versions disposent, dans l'IHM, d'une interface permettant d'éditer le texte de manière simplifiée.
 
 il est possible d'associer des groupes a un document dans l'ihm.
 
+# Dossiers
+La notion de dossier est une notion qui permet de ranger et de regrouper les documents.
+Un dossier peux contenir de 0 à n document et de 0 à n dossier
+il n'y a pas de droit sur les dossiers.
+Il est possible de déplacer un dossier dans un autres dossier. Se déplacement déplace également les enfants de ce dossier.
+Il est possible de déplacer un document de n'importe quel dossier vers n'importe quel dossier.
 
 # Utilisateurs
 Les utilisateurs doivent pouvoir se connecter avec leurs comptes Discord ou Google.

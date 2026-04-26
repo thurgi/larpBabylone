@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useMarkdownEditor, MarkdownEditorView } from '@gravity-ui/markdown-editor';
 import { Button, Icon, useToaster } from '@gravity-ui/uikit';
 import { FloppyDisk } from '@gravity-ui/icons';
@@ -21,6 +21,14 @@ export function VersionEditor({ content, onSave, saving }: Props) {
     allowHTML: false,
   });
 
+  useEffect(() => {
+    const handler = () => setDirty(true);
+    editor.on('change', handler);
+    return () => {
+      editor.off('change', handler);
+    };
+  }, [editor]);
+
   const handleSave = useCallback(() => {
     const value = editor.getValue();
     onSave(value).then(() => setDirty(false));
@@ -40,7 +48,7 @@ export function VersionEditor({ content, onSave, saving }: Props) {
           Sauvegarder
         </Button>
       </div>
-      <div className="version-editor__container" onChange={() => setDirty(true)}>
+      <div className="version-editor__container">
         <MarkdownEditorView stickyToolbar autofocus editor={editor} toaster={toaster} />
       </div>
     </div>

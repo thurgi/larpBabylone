@@ -10,6 +10,7 @@ export interface DocumentEntity {
   createdAt: string;
   updatedAt: string;
   groupIds: string[];
+  folderId: string | null;
 }
 
 @Injectable()
@@ -25,6 +26,7 @@ export class DocumentsService {
       createdAt: now,
       updatedAt: now,
       groupIds: dto.groupIds || [],
+      folderId: dto.folderId || null,
     };
 
     await this.storageService.ensureDir(
@@ -66,6 +68,7 @@ export class DocumentsService {
     const doc = await this.findOne(id);
     if (dto.title !== undefined) doc.title = dto.title;
     if (dto.groupIds !== undefined) doc.groupIds = dto.groupIds;
+    if (dto.folderId !== undefined) doc.folderId = dto.folderId;
     doc.updatedAt = new Date().toISOString();
 
     await this.storageService.writeJson(

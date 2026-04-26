@@ -139,4 +139,86 @@ describe('Documents (e2e)', () => {
         });
     });
   });
+
+  describe('GET /documents/:documentId/current', () => {
+    let docId: string;
+    let versionId: string;
+
+    beforeAll(async () => {
+      const docRes = await request(ctx.app.getHttpServer())
+        .post('/documents')
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .send({ title: 'Doc pour current' });
+      docId = docRes.body.id;
+    });
+
+    it('should return 401 without token', () => {
+      return request(ctx.app.getHttpServer())
+        .get(`/documents/${docId}/current`)
+        .expect(401);
+    });
+
+    it('should return 404 when no versions exist', () => {
+      return request(ctx.app.getHttpServer())
+        .get(`/documents/${docId}/current`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(404);
+    });
+
+    it('should return 404 when no version is validated', async () => {
+      const vRes = await request(ctx.app.getHttpServer())
+        .post(`/documents/${docId}/versions`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .send({ content: '# Brouillon' });
+      versionId = vRes.body.id;
+
+      return request(ctx.app.getHttpServer())
+        .get(`/documents/${docId}/current`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(404);
+    });
+
+    it('should return markdown content of the validated version', async () => {
+      await request(ctx.app.getHttpServer())
+        .patch(`/documents/${docId}/versions/${versionId}/validate`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(200);
+
+      return request(ctx.app.getHttpServer())
+        .get(`/documents/${docId}/current`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(200)
+        .expect('Content-Type', /text\/markdown/)
+        .expect((res) => {
+          expect(res.text).toBe('# Brouillon');
+        });
+    });
+
+    it('should return the latest validated version after switching', async () => {
+      const v2Res = await request(ctx.app.getHttpServer())
+        .post(`/documents/${docId}/versions`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .send({ content: '# Version Deux' });
+
+      await request(ctx.app.getHttpServer())
+        .patch(`/documents/${docId}/versions/${v2Res.body.id}/validate`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(200);
+
+      return request(ctx.app.getHttpServer())
+        .get(`/documents/${docId}/current`)
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.text).toBe('# Version Deux');
+        });
+    });
+
+    it('should return 404 for unknown document', () => {
+      return request(ctx.app.getHttpServer())
+        .get('/documents/00000000-0000-0000-0000-000000000000/current')
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(404);
+    });
+  });
 });

@@ -10,6 +10,7 @@ export interface GroupEntity {
   permissions: {
     documents: { create?: boolean; read?: boolean; update?: boolean; delete?: boolean };
     versions: { create?: boolean; read?: boolean; update?: boolean; delete?: boolean };
+    groups?: { create?: boolean; read?: boolean; update?: boolean; delete?: boolean };
     publicRead?: boolean;
     admin?: boolean;
   };

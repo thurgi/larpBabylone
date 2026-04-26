@@ -10,9 +10,11 @@ import { DiscordStrategy } from './discord.strategy';
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'test-secret',
-      signOptions: { expiresIn: '24h' },
+    JwtModule.registerAsync({
+      useFactory: () => ({
+        secret: process.env.JWT_SECRET || 'test-secret',
+        signOptions: { expiresIn: '24h' },
+      }),
     }),
   ],
   controllers: [AuthController],

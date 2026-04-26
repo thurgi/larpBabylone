@@ -11,4 +11,7 @@ export class UpdateDocumentDto {
   @IsArray()
   @IsUUID('all', { each: true })
   groupIds?: string[];
+
+  @IsOptional()
+  folderId?: string | null;
 }

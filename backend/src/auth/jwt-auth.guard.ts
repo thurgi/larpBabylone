@@ -7,3 +7,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 }
+
+@Injectable()
+export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    try {
+      await super.canActivate(context);
+    } catch {
+      // No valid token — allow anonymous through
+    }
+    return true;
+  }
+}

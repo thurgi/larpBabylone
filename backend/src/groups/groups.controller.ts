@@ -9,14 +9,40 @@ import {
   UseGuards,
   HttpCode,
   ParseUUIDPipe,
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  ForbiddenException,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AuthService, UserPayload } from '../auth/auth.service';
+
+@Injectable()
+export class GroupsAdminGuard implements CanActivate {
+  constructor(private readonly authService: AuthService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const user: UserPayload = request.user;
+    if (!user) {
+      throw new ForbiddenException();
+    }
+    if (this.authService.isAdmin(user.username)) {
+      return true;
+    }
+    const isGroupAdmin = await this.authService.isGroupAdmin(user.id);
+    if (isGroupAdmin) {
+      return true;
+    }
+    throw new ForbiddenException('Accès réservé aux administrateurs');
+  }
+}
 
 @Controller('groups')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, GroupsAdminGuard)
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 

@@ -14,6 +14,7 @@ export class StorageService implements OnModuleInit {
     await this.ensureDir(path.join(this.dataDir, 'documents'));
     await this.ensureDir(path.join(this.dataDir, 'groups'));
     await this.ensureDir(path.join(this.dataDir, 'users'));
+    await this.ensureDir(path.join(this.dataDir, 'folders'));
   }
 
   getDataDir(): string {

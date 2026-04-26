@@ -17,6 +17,8 @@ tags:
     description: Gestion des versions d'un document
   - name: Groups
     description: Gestion des groupes et permissions
+  - name: Folders
+    description: Gestion des dossiers
 
 paths:
   # ── Authentification ──────────────────────────────────────────────────
@@ -127,7 +129,7 @@ paths:
                 $ref: "#/components/schemas/Error"
 
   # ── Documents ─────────────────────────────────────────────────────────
-  /api/documents:
+  /documents:
     get:
       tags: [Documents]
       summary: Lister les documents
@@ -187,7 +189,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /api/documents/{documentId}:
+  /documents/{documentId}:
     parameters:
       - $ref: "#/components/parameters/documentId"
 
@@ -292,8 +294,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /documents/{documentId}/current:
+    parameters:
+      - $ref: "#/components/parameters/documentId"
+    get:
+      tags: [Documents]
+      summary: Consulter la version active du document
+      description: Renvoie directement le contenu markdown de la version active (validée) du document.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Contenu markdown de la version active.
+          content:
+            text/markdown:
+              schema:
+                type: string
+        "404":
+          description: Document introuvable ou aucune version active.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   # ── Versions ──────────────────────────────────────────────────────────
-  /api/documents/{documentId}/versions:
+  /documents/{documentId}/versions:
     parameters:
       - $ref: "#/components/parameters/documentId"
 
@@ -373,7 +398,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /api/documents/{documentId}/versions/{versionId}:
+  /documents/{documentId}/versions/{versionId}:
     parameters:
       - $ref: "#/components/parameters/documentId"
       - $ref: "#/components/parameters/versionId"
@@ -481,7 +506,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /api/documents/{documentId}/versions/{versionId}/validate:
+  /documents/{documentId}/versions/{versionId}/validate:
     parameters:
       - $ref: "#/components/parameters/documentId"
       - $ref: "#/components/parameters/versionId"
@@ -519,7 +544,7 @@ paths:
                 $ref: "#/components/schemas/Error"
 
   # ── Groupes ───────────────────────────────────────────────────────────
-  /api/groups:
+  /groups:
     get:
       tags: [Groups]
       summary: Lister les groupes
@@ -572,7 +597,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /api/groups/{groupId}:
+  /groups/{groupId}:
     parameters:
       - $ref: "#/components/parameters/groupId"
 
@@ -654,6 +679,166 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Groupe introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  # ── Dossiers ──────────────────────────────────────────────────────────
+  /folders:
+    get:
+      tags: [Folders]
+      summary: Lister les dossiers
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Liste des dossiers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Folder"
+    post:
+      tags: [Folders]
+      summary: Créer un dossier
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FolderCreate"
+      responses:
+        "201":
+          description: Dossier créé.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Folder"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /folders/{folderId}:
+    get:
+      tags: [Folders]
+      summary: Récupérer un dossier
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Détails du dossier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Folder"
+        "404":
+          description: Dossier introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags: [Folders]
+      summary: Mettre à jour un dossier
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FolderUpdate"
+      responses:
+        "200":
+          description: Dossier mis à jour.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Folder"
+        "400":
+          description: Données invalides ou référence circulaire.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Dossier introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags: [Folders]
+      summary: Supprimer un dossier
+      description: Supprime le dossier et tous ses sous-dossiers récursivement.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Dossier supprimé.
+        "404":
+          description: Dossier introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /folders/move-document/{documentId}:
+    patch:
+      tags: [Folders]
+      summary: Déplacer un document dans un dossier
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MoveDocument"
+      responses:
+        "200":
+          description: Document déplacé.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "404":
+          description: Document ou dossier introuvable.
           content:
             application/json:
               schema:
@@ -749,6 +934,10 @@ components:
           items:
             type: string
             format: uuid
+        folderId:
+          type: string
+          format: uuid
+          nullable: true
 
     DocumentCreate:
       type: object
@@ -763,6 +952,9 @@ components:
           items:
             type: string
             format: uuid
+        folderId:
+          type: string
+          format: uuid
 
     DocumentUpdate:
       type: object
@@ -909,6 +1101,59 @@ components:
         delete:
           type: boolean
           default: false
+
+    # ── Folders ──────────────────────────────────────────────────────────
+    Folder:
+      type: object
+      required: [id, name, parentId, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        parentId:
+          type: string
+          format: uuid
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FolderCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        parentId:
+          type: string
+          format: uuid
+
+    FolderUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        parentId:
+          type: string
+          format: uuid
+          nullable: true
+
+    MoveDocument:
+      type: object
+      properties:
+        folderId:
+          type: string
+          format: uuid
+          nullable: true
 
     # ── Error ───────────────────────────────────────────────────────────
     Error:

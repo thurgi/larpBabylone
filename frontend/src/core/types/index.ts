@@ -13,6 +13,7 @@ export interface Document {
   createdAt: string;
   updatedAt: string;
   groupIds: string[];
+  folderId: string | null;
 }
 
 export interface Version {
@@ -48,4 +49,12 @@ export interface Group {
   name: string;
   permissions: GroupPermissions;
   userIds: string[];
+}
+
+export interface Folder {
+  id: string;
+  name: string;
+  parentId: string | null;
+  createdAt: string;
+  updatedAt: string;
 }

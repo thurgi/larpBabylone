@@ -15,8 +15,10 @@ export interface TestContext {
   dataDir: string;
   userToken: string;
   adminToken: string;
+  otherUserToken: string;
   userId: string;
   adminId: string;
+  otherUserId: string;
 }
 
 export async function setupTestApp(): Promise<TestContext> {
@@ -41,6 +43,7 @@ export async function setupTestApp(): Promise<TestContext> {
   // Create test users on disk
   const userId = '11111111-1111-4111-a111-111111111111';
   const adminId = '22222222-2222-4222-b222-222222222222';
+  const otherUserId = '33333333-3333-4333-b333-333333333333';
 
   await storageService.writeJson(storageService.resolvePath('users', `${userId}.json`), {
     id: userId,
@@ -58,10 +61,19 @@ export async function setupTestApp(): Promise<TestContext> {
     providerId: 'google-456',
   });
 
+  await storageService.writeJson(storageService.resolvePath('users', `${otherUserId}.json`), {
+    id: otherUserId,
+    username: 'other-user',
+    email: 'other@example.com',
+    provider: 'discord',
+    providerId: 'discord-789',
+  });
+
   const userToken = jwtService.sign({ sub: userId, username: 'test-user' });
   const adminToken = jwtService.sign({ sub: adminId, username: 'admin-user' });
+  const otherUserToken = jwtService.sign({ sub: otherUserId, username: 'other-user' });
 
-  return { app, jwtService, storageService, dataDir, userToken, adminToken, userId, adminId };
+  return { app, jwtService, storageService, dataDir, userToken, adminToken, otherUserToken, userId, adminId, otherUserId };
 }
 
 export async function teardownTestApp(ctx: TestContext): Promise<void> {

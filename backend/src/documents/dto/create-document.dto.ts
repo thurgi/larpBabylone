@@ -10,4 +10,8 @@ export class CreateDocumentDto {
   @IsArray()
   @IsUUID('all', { each: true })
   groupIds?: string[];
+
+  @IsOptional()
+  @IsUUID()
+  folderId?: string;
 }

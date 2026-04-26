@@ -123,6 +123,28 @@ export class VersionsService {
     await this.storageService.deleteDir(dir);
   }
 
+  async findCurrentContent(documentId: string): Promise<string> {
+    const docMeta = await this.storageService.readJson(
+      this.storageService.resolvePath('documents', documentId, 'metadata.json'),
+    );
+    if (!docMeta) {
+      throw new NotFoundException('Document introuvable');
+    }
+
+    const dirs = await this.storageService.listDirs(this.versionsDir(documentId));
+    for (const dir of dirs) {
+      const meta = await this.storageService.readJson<VersionEntity>(
+        `${this.versionDir(documentId, dir)}/metadata.json`,
+      );
+      if (meta && meta.isValid) {
+        const content = (await this.storageService.readText(`${this.versionDir(documentId, dir)}/content.md`)) || '';
+        return content;
+      }
+    }
+
+    throw new NotFoundException('Aucune version active');
+  }
+
   async validate(documentId: string, versionId: string): Promise<VersionEntity> {
     const dir = this.versionDir(documentId, versionId);
     const meta = await this.storageService.readJson<VersionEntity>(`${dir}/metadata.json`);

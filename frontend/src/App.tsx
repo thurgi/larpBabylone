@@ -11,6 +11,7 @@ import './App.scss';
 
 const LoginPage = lazy(() => import('./views/login/LoginPage').then(m => ({ default: m.LoginPage })));
 const DocumentsPage = lazy(() => import('./views/documents/DocumentsPage').then(m => ({ default: m.DocumentsPage })));
+const DocumentViewPage = lazy(() => import('./views/document-view/DocumentViewPage').then(m => ({ default: m.DocumentViewPage })));
 const EditorPage = lazy(() => import('./views/editor/EditorPage').then(m => ({ default: m.EditorPage })));
 const GroupsPage = lazy(() => import('./views/groups/GroupsPage').then(m => ({ default: m.GroupsPage })));
 
@@ -31,7 +32,8 @@ export function App() {
                     <Header />
                     <Routes>
                       <Route path="/" element={<DocumentsPage />} />
-                      <Route path="/documents/:documentId" element={<EditorPage />} />
+                      <Route path="/documents/:documentId" element={<DocumentViewPage />} />
+                      <Route path="/documents/:documentId/edit" element={<EditorPage />} />
                       <Route path="/groups" element={<GroupsPage />} />
                     </Routes>
                   </ProtectedRoute>

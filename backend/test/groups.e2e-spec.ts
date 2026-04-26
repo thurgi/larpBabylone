@@ -27,10 +27,17 @@ describe('Groups (e2e)', () => {
         .expect(401);
     });
 
-    it('GET /groups should return empty array', () => {
+    it('GET /groups should return 403 for non-admin user', () => {
       return request(ctx.app.getHttpServer())
         .get('/groups')
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.otherUserToken}`)
+        .expect(403);
+    });
+
+    it('GET /groups should return empty array for admin', () => {
+      return request(ctx.app.getHttpServer())
+        .get('/groups')
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toEqual([]);
@@ -40,15 +47,27 @@ describe('Groups (e2e)', () => {
     it('POST /groups should return 400 with invalid body', () => {
       return request(ctx.app.getHttpServer())
         .post('/groups')
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .send({})
         .expect(400);
     });
 
-    it('POST /groups should create a group', () => {
+    it('POST /groups should return 403 for non-admin user', () => {
       return request(ctx.app.getHttpServer())
         .post('/groups')
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.otherUserToken}`)
+        .send({
+          name: 'Hack',
+          permissions: validPermissions,
+          userIds: [],
+        })
+        .expect(403);
+    });
+
+    it('POST /groups should create a group (admin)', () => {
+      return request(ctx.app.getHttpServer())
+        .post('/groups')
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .send({
           name: 'Éditeurs',
           permissions: validPermissions,
@@ -69,7 +88,7 @@ describe('Groups (e2e)', () => {
     it('GET /groups should return one group', () => {
       return request(ctx.app.getHttpServer())
         .get('/groups')
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveLength(1);
@@ -80,7 +99,7 @@ describe('Groups (e2e)', () => {
     it('GET /groups/:id should return the group', () => {
       return request(ctx.app.getHttpServer())
         .get(`/groups/${groupId}`)
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('id', groupId);
@@ -91,47 +110,132 @@ describe('Groups (e2e)', () => {
     it('GET /groups/:id should return 404 for unknown id', () => {
       return request(ctx.app.getHttpServer())
         .get('/groups/00000000-0000-0000-0000-000000000000')
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .expect(404);
     });
 
     it('PUT /groups/:id should update the group', () => {
       return request(ctx.app.getHttpServer())
         .put(`/groups/${groupId}`)
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .send({ name: 'Lecteurs' })
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('name', 'Lecteurs');
-          // Permissions should remain unchanged
           expect(res.body.permissions.documents.read).toBe(true);
         });
+    });
+
+    it('PUT /groups/:id should return 403 for non-admin user', () => {
+      return request(ctx.app.getHttpServer())
+        .put(`/groups/${groupId}`)
+        .set('Cookie', `jwt=${ctx.otherUserToken}`)
+        .send({ name: 'Hack' })
+        .expect(403);
+    });
+
+    it('DELETE /groups/:id should return 403 for non-admin user', () => {
+      return request(ctx.app.getHttpServer())
+        .delete(`/groups/${groupId}`)
+        .set('Cookie', `jwt=${ctx.otherUserToken}`)
+        .expect(403);
     });
 
     it('DELETE /groups/:id should delete the group', () => {
       return request(ctx.app.getHttpServer())
         .delete(`/groups/${groupId}`)
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .expect(204);
     });
 
     it('GET /groups/:id should return 404 after deletion', () => {
       return request(ctx.app.getHttpServer())
         .get(`/groups/${groupId}`)
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .expect(404);
+    });
+  });
+
+  describe('Group admin access', () => {
+    it('user with admin permission in a group can access groups', async () => {
+      // Create a group with admin permission and test-user as member
+      const groupRes = await request(ctx.app.getHttpServer())
+        .post('/groups')
+        .set('Cookie', `jwt=${ctx.adminToken}`)
+        .send({
+          name: 'Admin Group',
+          permissions: {
+            documents: { create: true, read: true, update: true, delete: true },
+            versions: { create: true, read: true, update: true, delete: true },
+            admin: true,
+          },
+          userIds: [ctx.userId],
+        });
+      expect(groupRes.status).toBe(201);
+
+      // test-user (group admin) should now be able to access groups
+      const listRes = await request(ctx.app.getHttpServer())
+        .get('/groups')
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .expect(200);
+      expect(listRes.body.length).toBeGreaterThanOrEqual(1);
+
+      // test-user can create a group
+      const newGroupRes = await request(ctx.app.getHttpServer())
+        .post('/groups')
+        .set('Cookie', `jwt=${ctx.userToken}`)
+        .send({
+          name: 'Created by group admin',
+          permissions: {
+            documents: { read: true },
+            versions: { read: true },
+          },
+          userIds: [],
+        });
+      expect(newGroupRes.status).toBe(201);
+
+      // otherUser still denied
+      await request(ctx.app.getHttpServer())
+        .get('/groups')
+        .set('Cookie', `jwt=${ctx.otherUserToken}`)
+        .expect(403);
+    });
+  });
+
+  describe('Groups with groups CRUD permissions', () => {
+    it('should accept groups permissions in DTO', () => {
+      return request(ctx.app.getHttpServer())
+        .post('/groups')
+        .set('Cookie', `jwt=${ctx.adminToken}`)
+        .send({
+          name: 'Group Manager',
+          permissions: {
+            documents: { create: true, read: true, update: true, delete: true },
+            versions: { create: true, read: true, update: true, delete: true },
+            groups: { create: true, read: true, update: true, delete: false },
+            admin: true,
+          },
+          userIds: [ctx.userId],
+        })
+        .expect(201)
+        .expect((res) => {
+          expect(res.body.permissions.groups).toEqual({
+            create: true,
+            read: true,
+            update: true,
+            delete: false,
+          });
+        });
     });
   });
 
   describe('Permissions enforcement', () => {
     let restrictedDocId: string;
-    let groupId: string;
 
     beforeAll(async () => {
-      // Create a group with read-only on documents, no version access
       const groupRes = await request(ctx.app.getHttpServer())
         .post('/groups')
-        .set('Cookie', `jwt=${ctx.userToken}`)
+        .set('Cookie', `jwt=${ctx.adminToken}`)
         .send({
           name: 'Lecture seule',
           permissions: {
@@ -140,13 +244,11 @@ describe('Groups (e2e)', () => {
           },
           userIds: [ctx.userId],
         });
-      groupId = groupRes.body.id;
 
-      // Create a document associated with this group
       const docRes = await request(ctx.app.getHttpServer())
         .post('/documents')
-        .set('Cookie', `jwt=${ctx.userToken}`)
-        .send({ title: 'Document restreint', groupIds: [groupId] });
+        .set('Cookie', `jwt=${ctx.adminToken}`)
+        .send({ title: 'Document restreint', groupIds: [groupRes.body.id] });
       restrictedDocId = docRes.body.id;
     });
 

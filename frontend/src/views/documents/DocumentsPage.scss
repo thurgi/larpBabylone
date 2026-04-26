@@ -13,7 +13,26 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
+  }
+
+  &__header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
   &__create-card {
@@ -39,6 +58,14 @@
     flex-direction: column;
     gap: 8px;
   }
+
+  &__move-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    min-width: 320px;
+  }
 }
 
 .document-card {
@@ -53,10 +80,25 @@
     background: var(--g-color-base-simple-hover);
   }
 
+  &--folder {
+    border-left: 3px solid var(--g-color-base-brand);
+  }
+
+  &__body {
+    flex: 1;
+    cursor: pointer;
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
     gap: 4px;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   &__actions {

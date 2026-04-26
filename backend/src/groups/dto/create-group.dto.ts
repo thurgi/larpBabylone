@@ -38,6 +38,11 @@ export class PermissionsDto {
   versions!: CrudPermissionsDto;
 
   @IsOptional()
+  @ValidateNested()
+  @Type(() => CrudPermissionsDto)
+  groups?: CrudPermissionsDto;
+
+  @IsOptional()
   @IsBoolean()
   publicRead?: boolean;
 
