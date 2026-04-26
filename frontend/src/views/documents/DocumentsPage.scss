@@ -1,0 +1,66 @@
+.documents-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  &__create-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  &__create-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__empty {
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.document-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--g-color-base-simple-hover);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 4px;
+  }
+}

@@ -1,0 +1,923 @@
+openapi: 3.0.3
+info:
+  title: LarpBabylone API
+  description: API collaborative d'édition de documents avec gestion de versions et de droits par groupes.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3001
+    description: Serveur de développement
+
+tags:
+  - name: Auth
+    description: Authentification OAuth2 (Discord, Google)
+  - name: Documents
+    description: Gestion des documents
+  - name: Versions
+    description: Gestion des versions d'un document
+  - name: Groups
+    description: Gestion des groupes et permissions
+
+paths:
+  # ── Authentification ──────────────────────────────────────────────────
+  /auth/discord:
+    get:
+      tags: [Auth]
+      summary: Redirection OAuth2 Discord
+      description: Redirige l'utilisateur vers la page d'authentification Discord.
+      responses:
+        "302":
+          description: Redirection vers Discord OAuth2.
+
+  /auth/discord/callback:
+    get:
+      tags: [Auth]
+      summary: Callback OAuth2 Discord
+      description: Callback après authentification Discord. Retourne un JWT.
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Authentification réussie.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Échec de l'authentification.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/google:
+    get:
+      tags: [Auth]
+      summary: Redirection OAuth2 Google
+      description: Redirige l'utilisateur vers la page d'authentification Google.
+      responses:
+        "302":
+          description: Redirection vers Google OAuth2.
+
+  /auth/google/callback:
+    get:
+      tags: [Auth]
+      summary: Callback OAuth2 Google
+      description: Callback après authentification Google. Retourne un JWT.
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Authentification réussie.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Échec de l'authentification.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Déconnexion
+      description: Invalide la session de l'utilisateur.
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Déconnexion réussie.
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Utilisateur courant
+      description: Retourne les informations de l'utilisateur connecté.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Informations de l'utilisateur.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  # ── Documents ─────────────────────────────────────────────────────────
+  /api/documents:
+    get:
+      tags: [Documents]
+      summary: Lister les documents
+      description: Retourne la liste des documents accessibles par l'utilisateur.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Liste des documents.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Document"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags: [Documents]
+      summary: Créer un document
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentCreate"
+      responses:
+        "201":
+          description: Document créé.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/documents/{documentId}:
+    parameters:
+      - $ref: "#/components/parameters/documentId"
+
+    get:
+      tags: [Documents]
+      summary: Lire un document
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Détail du document.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Document introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      tags: [Documents]
+      summary: Modifier un document
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentUpdate"
+      responses:
+        "200":
+          description: Document modifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Document introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      tags: [Documents]
+      summary: Supprimer un document
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Document supprimé.
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Document introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  # ── Versions ──────────────────────────────────────────────────────────
+  /api/documents/{documentId}/versions:
+    parameters:
+      - $ref: "#/components/parameters/documentId"
+
+    get:
+      tags: [Versions]
+      summary: Lister les versions d'un document
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Liste des versions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Version"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Document introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags: [Versions]
+      summary: Créer une version
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VersionCreate"
+      responses:
+        "201":
+          description: Version créée.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Version"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Document introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/documents/{documentId}/versions/{versionId}:
+    parameters:
+      - $ref: "#/components/parameters/documentId"
+      - $ref: "#/components/parameters/versionId"
+
+    get:
+      tags: [Versions]
+      summary: Lire une version
+      description: Retourne les métadonnées et le contenu markdown de la version.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Détail de la version avec contenu.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionFull"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Version introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      tags: [Versions]
+      summary: Modifier une version
+      description: Met à jour les métadonnées et/ou le contenu markdown de la version.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VersionUpdate"
+      responses:
+        "200":
+          description: Version modifiée.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionFull"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Version introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      tags: [Versions]
+      summary: Supprimer une version
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Version supprimée.
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Version introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/documents/{documentId}/versions/{versionId}/validate:
+    parameters:
+      - $ref: "#/components/parameters/documentId"
+      - $ref: "#/components/parameters/versionId"
+
+    patch:
+      tags: [Versions]
+      summary: Valider une version
+      description: Marque cette version comme valide et invalide toutes les autres versions du document.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Version validée.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Version"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Droits insuffisants.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Version introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  # ── Groupes ───────────────────────────────────────────────────────────
+  /api/groups:
+    get:
+      tags: [Groups]
+      summary: Lister les groupes
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Liste des groupes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Group"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags: [Groups]
+      summary: Créer un groupe
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupCreate"
+      responses:
+        "201":
+          description: Groupe créé.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/groups/{groupId}:
+    parameters:
+      - $ref: "#/components/parameters/groupId"
+
+    get:
+      tags: [Groups]
+      summary: Lire un groupe
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Détail du groupe.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Groupe introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      tags: [Groups]
+      summary: Modifier un groupe
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupUpdate"
+      responses:
+        "200":
+          description: Groupe modifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Groupe introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      tags: [Groups]
+      summary: Supprimer un groupe
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Groupe supprimé.
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Groupe introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+# ═══════════════════════════════════════════════════════════════════════
+# Composants
+# ═══════════════════════════════════════════════════════════════════════
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    documentId:
+      name: documentId
+      in: path
+      required: true
+      description: Identifiant unique du document (UUID).
+      schema:
+        type: string
+        format: uuid
+
+    versionId:
+      name: versionId
+      in: path
+      required: true
+      description: Identifiant unique de la version (UUID).
+      schema:
+        type: string
+        format: uuid
+
+    groupId:
+      name: groupId
+      in: path
+      required: true
+      description: Identifiant unique du groupe (UUID).
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    # ── Auth ────────────────────────────────────────────────────────────
+    AuthResponse:
+      type: object
+      required: [accessToken, user]
+      properties:
+        accessToken:
+          type: string
+          description: JWT d'accès.
+        user:
+          $ref: "#/components/schemas/User"
+
+    # ── User ────────────────────────────────────────────────────────────
+    User:
+      type: object
+      required: [id, username, provider]
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        provider:
+          type: string
+          enum: [discord, google]
+        providerId:
+          type: string
+
+    # ── Document ────────────────────────────────────────────────────────
+    Document:
+      type: object
+      required: [id, title, createdAt, updatedAt, groupIds]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        groupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    DocumentCreate:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        groupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    DocumentUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        groupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    # ── Version ─────────────────────────────────────────────────────────
+    Version:
+      type: object
+      required: [id, documentId, isValid, createdAt, updatedAt, authorId]
+      properties:
+        id:
+          type: string
+          format: uuid
+        documentId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        isValid:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        authorId:
+          type: string
+          format: uuid
+
+    VersionFull:
+      allOf:
+        - $ref: "#/components/schemas/Version"
+        - type: object
+          required: [content]
+          properties:
+            content:
+              type: string
+              description: Contenu markdown de la version.
+
+    VersionCreate:
+      type: object
+      required: [content]
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+          description: Contenu markdown de la version.
+
+    VersionUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+          description: Contenu markdown de la version.
+
+    # ── Group ───────────────────────────────────────────────────────────
+    Group:
+      type: object
+      required: [id, name, permissions, userIds]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        permissions:
+          $ref: "#/components/schemas/Permissions"
+        userIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    GroupCreate:
+      type: object
+      required: [name, permissions]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        permissions:
+          $ref: "#/components/schemas/Permissions"
+        userIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    GroupUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        permissions:
+          $ref: "#/components/schemas/Permissions"
+        userIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    Permissions:
+      type: object
+      required: [documents, versions]
+      properties:
+        documents:
+          $ref: "#/components/schemas/CrudPermissions"
+        versions:
+          $ref: "#/components/schemas/CrudPermissions"
+        publicRead:
+          type: boolean
+          default: false
+
+    CrudPermissions:
+      type: object
+      properties:
+        create:
+          type: boolean
+          default: false
+        read:
+          type: boolean
+          default: false
+        update:
+          type: boolean
+          default: false
+        delete:
+          type: boolean
+          default: false
+
+    # ── Error ───────────────────────────────────────────────────────────
+    Error:
+      type: object
+      required: [statusCode, message]
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        error:
+          type: string

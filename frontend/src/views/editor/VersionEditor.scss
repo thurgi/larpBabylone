@@ -1,0 +1,20 @@
+.version-editor {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--g-color-line-generic);
+    flex-shrink: 0;
+  }
+
+  &__container {
+    flex: 1;
+    overflow: auto;
+    padding: 0 16px;
+  }
+}

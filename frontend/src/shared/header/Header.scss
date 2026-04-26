@@ -1,0 +1,37 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  background: var(--g-color-base-background);
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 4px;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__user {
+    font-size: 14px;
+    color: var(--g-color-text-secondary);
+  }
+}

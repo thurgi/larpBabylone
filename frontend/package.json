@@ -1,0 +1,40 @@
+{
+  "name": "larpbabylone-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@diplodoc/transform": "^4.73.3",
+    "@gravity-ui/components": "^3.0.0",
+    "@gravity-ui/icons": "^2.0.0",
+    "@gravity-ui/markdown-editor": "^14.13.0",
+    "@gravity-ui/uikit": "^6.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-router-dom": "^6.23.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "@vitest/coverage-v8": "^4.1.5",
+    "jsdom": "^29.0.2",
+    "sass": "^1.87.0",
+    "typescript": "^5.8.0",
+    "vite": "^6.4.2",
+    "vitest": "^4.1.5"
+  },
+  "overrides": {
+    "uuid": "^14.0.0",
+    "markdown-it": "^14.1.0"
+  }
+}

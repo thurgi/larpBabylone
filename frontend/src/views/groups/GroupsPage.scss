@@ -1,0 +1,88 @@
+.groups-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  &__empty {
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__modal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    min-width: 400px;
+  }
+
+  &__permissions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__perm-row {
+    display: flex;
+    gap: 16px;
+    padding-left: 8px;
+  }
+
+  &__modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  &__users {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}
+
+.group-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 4px;
+  }
+}

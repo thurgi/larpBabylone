@@ -1,0 +1,53 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: larpbabylone-nginx
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - babylone
+
+  backend:
+    image: node:20-alpine
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    container_name: larpbabylone-backend
+    env_file:
+      - ../.env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    volumes:
+      - ../backend:/app
+      - ../data:/data
+    environment:
+      - NODE_ENV=development
+      - DATA_DIR=/data
+    working_dir: /app
+    command: npm run start:dev
+    networks:
+      - babylone
+
+  frontend:
+    image: node:20-alpine
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    container_name: larpbabylone-frontend
+    volumes:
+      - ../frontend:/app
+    environment:
+      - NODE_ENV=development
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0 --port 3000
+    depends_on:
+      - backend
+    networks:
+      - babylone
+
+networks:
+  babylone:
+    name: babylone
+

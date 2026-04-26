@@ -1,0 +1,51 @@
+export interface User {
+  id: string;
+  username: string;
+  email?: string;
+  provider: 'discord' | 'google';
+  providerId?: string;
+  isGroupAdmin?: boolean;
+}
+
+export interface Document {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  groupIds: string[];
+}
+
+export interface Version {
+  id: string;
+  documentId: string;
+  title?: string;
+  isValid: boolean;
+  createdAt: string;
+  updatedAt: string;
+  authorId: string;
+}
+
+export interface VersionFull extends Version {
+  content: string;
+}
+
+export interface CrudPermissions {
+  create?: boolean;
+  read?: boolean;
+  update?: boolean;
+  delete?: boolean;
+}
+
+export interface GroupPermissions {
+  documents: CrudPermissions;
+  versions: CrudPermissions;
+  publicRead?: boolean;
+  admin?: boolean;
+}
+
+export interface Group {
+  id: string;
+  name: string;
+  permissions: GroupPermissions;
+  userIds: string[];
+}
