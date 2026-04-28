@@ -1,5 +1,5 @@
 // Mobile-first: base styles are for mobile
-.groups-page {
+.objects-page {
   max-width: 56.25em;
   margin: 0 auto;
   padding: 1em 0.75em;
@@ -39,38 +39,10 @@
     box-sizing: border-box;
   }
 
-  &__permissions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75em;
-  }
-
-  &__perm-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5em;
-    padding-left: 0.5em;
-  }
-
   &__modal-actions {
     display: flex;
     gap: 0.5em;
     justify-content: flex-end;
-  }
-
-  &__users {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-  }
-
-  &__user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375em;
-    padding-left: 0.5em;
-    max-height: 12.5em;
-    overflow-y: auto;
   }
 
   @media (min-width: 48em) {
@@ -87,14 +59,10 @@
       min-width: 25em;
       padding: 1.5em;
     }
-
-    &__perm-row {
-      gap: 1em;
-    }
   }
 }
 
-.group-card {
+.object-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -104,10 +72,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.25em;
+    min-width: 0;
+    flex: 1;
   }
 
   &__actions {
     display: flex;
     gap: 0.25em;
+    flex-shrink: 0;
   }
 }

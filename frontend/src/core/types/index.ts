@@ -58,3 +58,11 @@ export interface Folder {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ObjectItem {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}

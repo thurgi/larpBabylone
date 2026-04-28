@@ -21,10 +21,15 @@ install:
 	@echo "${COLOR_INFO}Installation des dépendances frontend...${COLOR_RESET}"
 	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm ci
 
+fix-dependencies:
+	@echo "${COLOR_INFO}Fixing dependencies...${COLOR_RESET}"
+	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm audit fix --force
+# 	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm audit fix --force
+
 ## Installer les dépendances backend uniquement
 install-backend:
 	@echo "${COLOR_INFO}Installation des dépendances backend...${COLOR_RESET}"
-	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm ci
+	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm install
 
 ## Installer les dépendances frontend uniquement
 install-frontend:

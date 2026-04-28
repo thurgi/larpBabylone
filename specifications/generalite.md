@@ -6,6 +6,7 @@ Elle permet de :
 * créer, lire, modifier et supprimer (CRUD) des documents.
 * créer, lire, modifier, supprimer (CRUD) des versions du document dont elles sont enfant.
 * créer, lire, modifier, supprimer (CRUD) des groupes
+* créer, lire, modifier, supprimer (CRUD) des objets.
 
 # Les documents et versions
 Un document est composé d'un ensemble de versions.
@@ -47,6 +48,9 @@ Une ihm doit permettre de gerer et d'afficher les groupes. Cette affichage est l
 
 Il est possible d'associer des utilisateurs a des groupes dans l'ihm
 
+# les objets
+Les objets sont présenté sous formes de liste.
+Les objets doivent avoir un nom et une descrition.
 
 
 # Solution retenue
@@ -60,7 +64,49 @@ Bien qu'il soit possible d'ajouter une base de données, il faut prouver l'inté
 ## IHM
 Pour simplifier l'édition de texte, la librairie @gravity-ui/markdown-editor sera utilisée (https://github.com/gravity-ui/markdown-editor).
 
+L'ihm doit être responsive pour un affichage optimisé sur mobile.
+
 ## Développement
 Tous les développements sont réalisés en environnement conteneurisé avec utilisation d'images publiques et montage des sources via des volumes. Ces containers utilisent l'utilisateur local avec récupération du GID et UID de l'utilisateur courant pour respecter les droits sur les fichiers entre environnement conteneurisé et environnement local.
 
 Un fichier Makefile permet de lancer les commandes d'installation, de lancement et d'arrêt des services. Un fichier d'environnement associé permet de stocker les variables spécifiques si nécessaire.
+
+## Back end
+
+### structure du projet
+
+backend/src/
+├── core/                          # Transversal partagé
+│   ├── auth/                      # Authentification/JWT
+│   ├── storage/                   # Abstraction stockage
+│   │     ├── files/               # Module de stockage par fichier
+│   │     └── sqlite/              # Module de stockage sql en sqlite
+│   ├── permissions/               # Guard générique
+│   └── groups/                    # Groupes & utilisateurs
+│
+├── modules/                       # Domaines métier isolés
+│   ├── documents/                 # Votre module actuel
+│   │   ├── documents.module.ts
+│   │   ├── documents.service.ts
+│   │   ├── folders/
+│   │   └── versions/
+│   │
+│   ├── events/                    # Nouveau : événements
+│   │   ├── events.module.ts
+│   │   ├── events.service.ts
+│   │   └── registrations/         # Inscriptions liées
+│   │
+│   ├── inventory/                 # Nouveau : matériel
+│   │   ├── inventory.module.ts
+│   │   ├── items.service.ts
+│   │   └── loans/                 # Prêts/réservations
+│   │
+│   └── (autres modules...)
+│
+└── app.module.ts
+
+
+### Stockage
+
+Le stockage va être réalisé dans une base de donnée SQLite.
+Les fichiers markdown va resté en local sur le disque
