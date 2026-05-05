@@ -1,30 +1,30 @@
 import { useEffect, useState } from 'react';
 import {
   Button,
-  Card,
   Text,
   TextInput,
   Loader,
   Icon,
   Modal,
 } from '@gravity-ui/uikit';
-import { Plus, TrashBin, Pencil } from '@gravity-ui/icons';
+import { Plus } from '@gravity-ui/icons';
 import { api } from '@/core/services';
-import type { ObjectItem } from '@/core/types';
+import type { ObjectItem as ObjectItemType } from '@/core/types';
+import { ObjectItem } from './ObjectItem';
 import './ObjectsPage.scss';
 
 export function ObjectsPage() {
-  const [objects, setObjects] = useState<ObjectItem[]>([]);
+  const [objects, setObjects] = useState<ObjectItemType[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingObject, setEditingObject] = useState<ObjectItem | null>(null);
+  const [editingObject, setEditingObject] = useState<ObjectItemType | null>(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   const fetchObjects = async () => {
     setLoading(true);
     try {
-      const data = await api.get<ObjectItem[]>('/api/objects');
+      const data = await api.get<ObjectItemType[]>('/api/objects');
       setObjects(data);
     } finally {
       setLoading(false);
@@ -42,7 +42,7 @@ export function ObjectsPage() {
     setModalOpen(true);
   };
 
-  const openEdit = (obj: ObjectItem) => {
+  const openEdit = (obj: ObjectItemType) => {
     setEditingObject(obj);
     setName(obj.name);
     setDescription(obj.description);
@@ -84,35 +84,26 @@ export function ObjectsPage() {
           Nouvel objet
         </Button>
       </div>
-
-      {objects.length === 0 ? (
-        <div className="objects-page__empty">
-          <Text variant="body-2" color="secondary">
-            Aucun objet. Créez-en un pour commencer.
-          </Text>
-        </div>
-      ) : (
-        <div className="objects-page__list">
-          {objects.map((obj) => (
-            <Card key={obj.id} className="object-card" size="m">
-              <div className="object-card__content">
-                <Text variant="subheader-2">{obj.name}</Text>
-                <Text variant="body-2" color="secondary">
-                  {obj.description}
-                </Text>
-              </div>
-              <div className="object-card__actions">
-                <Button view="flat" size="s" onClick={() => openEdit(obj)}>
-                  <Icon data={Pencil} size={14} />
-                </Button>
-                <Button view="flat" size="s" onClick={(e) => handleDelete(e, obj.id)}>
-                  <Icon data={TrashBin} size={14} />
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+      <div className='objects-page__body'>
+        {objects.length === 0 ? (
+          <div className="objects-page__empty">
+            <Text variant="body-2" color="secondary">
+              Aucun objet. Créez-en un pour commencer.
+            </Text>
+          </div>
+        ) : (
+          <ul className="objects-page__list">
+            {objects.map((obj) => (
+              <ObjectItem
+                key={obj.id}
+                object={obj}
+                onEdit={openEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <div className="objects-page__modal">

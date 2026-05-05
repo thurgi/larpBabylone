@@ -104,12 +104,84 @@ describe('ObjectsPage', () => {
 
     vi.mocked(api.get).mockResolvedValue([]);
 
-    const cardActions = document.querySelector('.object-card__actions');
-    const buttons = cardActions?.querySelectorAll('button');
-    if (buttons && buttons.length >= 2) {
-      await user.click(buttons[1]);
+    const deleteButton = document.querySelector('.object-item__actions button');
+    if (deleteButton) {
+      await user.click(deleteButton);
     }
 
     expect(api.delete).toHaveBeenCalledWith('/api/objects/o1');
+  });
+
+  it('should edit an object when clicking on the card', async () => {
+    const user = userEvent.setup();
+    vi.mocked(api.get).mockResolvedValue([mockObject]);
+    vi.mocked(api.put).mockResolvedValue(mockObject);
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Épée')).toBeInTheDocument();
+    });
+
+    const card = document.querySelector('.object-item__card') as HTMLElement;
+    await user.click(card);
+
+    expect(screen.getByText("Modifier l'objet")).toBeInTheDocument();
+
+    const nameInput = screen.getByPlaceholderText("Nom de l'objet");
+    expect(nameInput).toHaveValue('Épée');
+
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Épée magique');
+
+    vi.mocked(api.get).mockResolvedValue([{ ...mockObject, name: 'Épée magique' }]);
+
+    await user.click(screen.getByText('Enregistrer'));
+
+    expect(api.put).toHaveBeenCalledWith('/api/objects/o1', expect.objectContaining({
+      name: 'Épée magique',
+    }));
+  });
+
+  it('should not save when name is empty', async () => {
+    const user = userEvent.setup();
+    vi.mocked(api.get).mockResolvedValue([mockObject]);
+    vi.mocked(api.put).mockResolvedValue(mockObject);
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Épée')).toBeInTheDocument();
+    });
+
+    const card = document.querySelector('.object-item__card') as HTMLElement;
+    await user.click(card);
+
+    const nameInput = screen.getByPlaceholderText("Nom de l'objet");
+    await user.clear(nameInput);
+
+    const saveButton = screen.getByText('Enregistrer');
+    expect(saveButton.closest('button')).toHaveAttribute('disabled');
+  });
+
+  it('should not call api on cancel', async () => {
+    const user = userEvent.setup();
+    vi.mocked(api.get).mockResolvedValue([mockObject]);
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Épée')).toBeInTheDocument();
+    });
+
+    const card = document.querySelector('.object-item__card') as HTMLElement;
+    await user.click(card);
+
+    expect(screen.getByPlaceholderText("Nom de l'objet")).toBeInTheDocument();
+
+    await user.click(screen.getByText('Annuler'));
+
+    expect(api.put).not.toHaveBeenCalled();
+    expect(api.post).not.toHaveBeenCalled();
   });
 });
