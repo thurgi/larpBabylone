@@ -1,0 +1,29 @@
+services:
+  nginx:
+    image: larpbabylone-frontend
+    container_name: larpbabylone-nginx-build
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    environment:
+      - API_BACKEND_URL=${API_BACKEND_URL:-http://backend:3001}
+    depends_on:
+      - backend
+    networks:
+      - babylone
+
+  backend:
+    image: larpbabylone-backend
+    container_name: larpbabylone-backend-build
+    env_file:
+      - ../.env
+    environment:
+      - NODE_ENV=production
+      - DATA_DIR=${DATA_DIR:-/data}
+    volumes:
+      - ../data:/data
+    networks:
+      - babylone
+
+networks:
+  babylone:
+    name: babylone

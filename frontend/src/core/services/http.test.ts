@@ -115,4 +115,50 @@ describe('http service', () => {
       value: originalLocation,
     });
   });
+
+  it('should fall back to status code when json parsing fails on error', async () => {
+    const mockResponse = {
+      ok: false,
+      status: 500,
+      json: () => Promise.reject(new Error('parse error')),
+    };
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
+
+    const api = await loadApi();
+    await expect(api.get('/api/broken')).rejects.toThrow('Erreur 500');
+  });
+
+  it('should make PUT requests', async () => {
+    const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ updated: true }) };
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
+
+    const api = await loadApi();
+    const result = await api.put('/api/items/1', { name: 'updated' });
+
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/items/1',
+      expect.objectContaining({
+        method: 'PUT',
+        body: JSON.stringify({ name: 'updated' }),
+      }),
+    );
+    expect(result).toEqual({ updated: true });
+  });
+
+  it('should make PATCH requests', async () => {
+    const mockResponse = { ok: true, status: 200, json: () => Promise.resolve({ patched: true }) };
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
+
+    const api = await loadApi();
+    const result = await api.patch('/api/items/1', { status: 'done' });
+
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/items/1',
+      expect.objectContaining({
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'done' }),
+      }),
+    );
+    expect(result).toEqual({ patched: true });
+  });
 });

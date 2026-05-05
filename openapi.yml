@@ -19,6 +19,8 @@ tags:
     description: Gestion des groupes et permissions
   - name: Folders
     description: Gestion des dossiers
+  - name: Objects
+    description: Gestion des objets
 
 paths:
   # ── Authentification ──────────────────────────────────────────────────
@@ -844,6 +846,147 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  # ── Objets ────────────────────────────────────────────────────────────
+  /objects:
+    get:
+      tags: [Objects]
+      summary: Lister les objets
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Liste des objets.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ObjectItem"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags: [Objects]
+      summary: Créer un objet
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ObjectCreate"
+      responses:
+        "201":
+          description: Objet créé.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ObjectItem"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /objects/{objectId}:
+    parameters:
+      - $ref: "#/components/parameters/objectId"
+
+    get:
+      tags: [Objects]
+      summary: Lire un objet
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Détail de l'objet.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ObjectItem"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Objet introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      tags: [Objects]
+      summary: Modifier un objet
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ObjectUpdate"
+      responses:
+        "200":
+          description: Objet modifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ObjectItem"
+        "400":
+          description: Données invalides.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Objet introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      tags: [Objects]
+      summary: Supprimer un objet
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Objet supprimé.
+        "401":
+          description: Non authentifié.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Objet introuvable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 # ═══════════════════════════════════════════════════════════════════════
 # Composants
 # ═══════════════════════════════════════════════════════════════════════
@@ -878,6 +1021,15 @@ components:
       in: path
       required: true
       description: Identifiant unique du groupe (UUID).
+      schema:
+        type: string
+        format: uuid
+
+    objectId:
+      name: objectId
+      in: path
+      required: true
+      description: Identifiant unique de l'objet (UUID).
       schema:
         type: string
         format: uuid
@@ -1154,6 +1306,48 @@ components:
           type: string
           format: uuid
           nullable: true
+
+    # ── Object ──────────────────────────────────────────────────────────
+    ObjectItem:
+      type: object
+      required: [id, name, description, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ObjectCreate:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 2000
+
+    ObjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 2000
 
     # ── Error ───────────────────────────────────────────────────────────
     Error:

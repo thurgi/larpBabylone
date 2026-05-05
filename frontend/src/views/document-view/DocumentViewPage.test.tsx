@@ -119,4 +119,51 @@ describe('DocumentViewPage', () => {
     await userEvent.click(screen.getByText('Retour'));
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
+
+  it('should show not found when fetch fails', async () => {
+    vi.mocked(api.get).mockRejectedValue(new Error('not found'));
+    vi.mocked(fetch).mockRejectedValue(new Error('network error'));
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Document introuvable')).toBeInTheDocument();
+    });
+  });
+
+  it('should show not found page when document is null', async () => {
+    vi.mocked(api.get).mockResolvedValue(null);
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      status: 404,
+      text: () => Promise.resolve(''),
+    } as Response);
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Document introuvable')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByText('Retour'));
+    expect(mockNavigate).toHaveBeenCalledWith('/');
+  });
+
+  it('should navigate to editor on "Créer une version" click', async () => {
+    vi.mocked(api.get).mockResolvedValue(mockDoc);
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      status: 404,
+      text: () => Promise.resolve(''),
+    } as Response);
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByText('Créer une version')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByText('Créer une version'));
+    expect(mockNavigate).toHaveBeenCalledWith('/documents/d1/edit');
+  });
 });

@@ -14,6 +14,7 @@ const DocumentsPage = lazy(() => import('./views/documents/DocumentsPage').then(
 const DocumentViewPage = lazy(() => import('./views/document-view/DocumentViewPage').then(m => ({ default: m.DocumentViewPage })));
 const EditorPage = lazy(() => import('./views/editor/EditorPage').then(m => ({ default: m.EditorPage })));
 const GroupsPage = lazy(() => import('./views/groups/GroupsPage').then(m => ({ default: m.GroupsPage })));
+const ObjectsPage = lazy(() => import('./views/objects/ObjectsPage').then(m => ({ default: m.ObjectsPage })));
 
 export function App() {
   return (
@@ -35,6 +36,7 @@ export function App() {
                       <Route path="/documents/:documentId" element={<DocumentViewPage />} />
                       <Route path="/documents/:documentId/edit" element={<EditorPage />} />
                       <Route path="/groups" element={<GroupsPage />} />
+                      <Route path="/objects" element={<ObjectsPage />} />
                     </Routes>
                   </ProtectedRoute>
                 }

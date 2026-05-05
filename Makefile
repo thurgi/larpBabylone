@@ -12,6 +12,7 @@ export
 
 NODE_IMAGE     = node:20-alpine
 DOCKER_COMPOSE = USER_ID=$(USER_ID) GROUP_ID=$(GROUP_ID) docker-compose -f automation/docker-compose.yml
+DOCKER_COMPOSE_BUILD = docker-compose --env-file .env -f automation/docker-compose-build.yml
 DOCKER_RUN     = docker run --rm --user $(USER_ID):$(GROUP_ID)
 
 ## Installer les dépendances (backend + frontend)
@@ -21,10 +22,15 @@ install:
 	@echo "${COLOR_INFO}Installation des dépendances frontend...${COLOR_RESET}"
 	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm ci
 
+fix-dependencies:
+	@echo "${COLOR_INFO}Fixing dependencies...${COLOR_RESET}"
+	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm audit fix --force
+# 	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm audit fix --force
+
 ## Installer les dépendances backend uniquement
 install-backend:
 	@echo "${COLOR_INFO}Installation des dépendances backend...${COLOR_RESET}"
-	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm ci
+	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm install
 
 ## Installer les dépendances frontend uniquement
 install-frontend:
@@ -79,6 +85,23 @@ build:
 lint-api:
 	@echo "${COLOR_INFO}Validation du contrat OpenAPI...${COLOR_RESET}"
 	docker run --rm -v $(current_dir):/spec redocly/cli lint /spec/openapi.yml
+
+## Construire les images Docker de production
+docker-build: build
+	@echo "${COLOR_INFO}Construction de l'image frontend...${COLOR_RESET}"
+	docker build -f automation/docker/Dockerfile.frontend -t larpbabylone-frontend .
+	@echo "${COLOR_INFO}Construction de l'image backend...${COLOR_RESET}"
+	docker build -f automation/docker/Dockerfile.backend --build-arg NODE_IMAGE=$(NODE_IMAGE) -t larpbabylone-backend .
+
+## Démarrer les containers de production (images buildées)
+start-build:
+	@echo "${COLOR_INFO}Démarrage des containers de production...${COLOR_RESET}"
+	$(DOCKER_COMPOSE_BUILD) up
+
+## Arrêter les containers de production
+stop-build:
+	@echo "${COLOR_INFO}Arrêt des containers de production...${COLOR_RESET}"
+	$(DOCKER_COMPOSE_BUILD) down
 
 help:
 	@printf "${COLOR_COMMENT}Usage:${COLOR_RESET}\n"

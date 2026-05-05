@@ -1,37 +1,94 @@
+// Mobile-first: base styles are for mobile
 .app-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  height: 56px;
+  justify-content: center;
+  position: relative;
+  padding: 0 0.75em;
+  height: 3em;
   border-bottom: 1px solid var(--g-color-line-generic);
   background: var(--g-color-base-background);
 
+  &__menu-btn {
+    position: absolute;
+    left: 0.75em;
+  }
+
   &__title {
-    font-size: 18px;
+    font-size: 1.125em;
     font-weight: 600;
     cursor: pointer;
   }
 
-  &__left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
   &__nav {
-    display: flex;
-    gap: 4px;
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 3em;
+    left: 0;
+    right: 0;
+    background: var(--g-color-base-background);
+    border-bottom: 1px solid var(--g-color-line-generic);
+    padding: 0.5em 0;
+    z-index: 100;
+
+    &--open {
+      display: flex;
+    }
   }
 
   &__right {
+    position: absolute;
+    right: 0.75em;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0.5em;
   }
 
   &__user {
-    font-size: 14px;
+    display: none;
+    font-size: 0.875em;
     color: var(--g-color-text-secondary);
+  }
+
+  &__logout-label {
+    display: none;
+  }
+
+  @media (min-width: 48em) {
+    justify-content: space-between;
+    padding: 0 1.5em;
+    height: 3.5em;
+
+    &__menu-btn {
+      display: none;
+    }
+
+    &__title {
+      position: static;
+    }
+
+    &__nav {
+      display: flex;
+      flex-direction: row;
+      position: static;
+      border-bottom: none;
+      padding: 0;
+      gap: 0.25em;
+      margin-left: 1em;
+    }
+
+    &__right {
+      position: static;
+      gap: 0.75em;
+    }
+
+    &__user {
+      display: inline;
+    }
+
+    &__logout-label {
+      display: inline;
+    }
   }
 }

@@ -3,7 +3,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from '../../src/app.module';
-import { StorageService } from '../../src/storage/storage.service';
+import { AuthService } from '../../src/core/auth/auth.service';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as os from 'os';
@@ -11,7 +11,7 @@ import * as os from 'os';
 export interface TestContext {
   app: INestApplication;
   jwtService: JwtService;
-  storageService: StorageService;
+  authService: AuthService;
   dataDir: string;
   userToken: string;
   adminToken: string;
@@ -38,14 +38,14 @@ export async function setupTestApp(): Promise<TestContext> {
   await app.init();
 
   const jwtService = moduleFixture.get<JwtService>(JwtService);
-  const storageService = moduleFixture.get<StorageService>(StorageService);
+  const authService = moduleFixture.get<AuthService>(AuthService);
 
-  // Create test users on disk
+  // Create test users in database
   const userId = '11111111-1111-4111-a111-111111111111';
   const adminId = '22222222-2222-4222-b222-222222222222';
   const otherUserId = '33333333-3333-4333-b333-333333333333';
 
-  await storageService.writeJson(storageService.resolvePath('users', `${userId}.json`), {
+  await authService.saveUser({
     id: userId,
     username: 'test-user',
     email: 'test@example.com',
@@ -53,7 +53,7 @@ export async function setupTestApp(): Promise<TestContext> {
     providerId: 'discord-123',
   });
 
-  await storageService.writeJson(storageService.resolvePath('users', `${adminId}.json`), {
+  await authService.saveUser({
     id: adminId,
     username: 'admin-user',
     email: 'admin@example.com',
@@ -61,7 +61,7 @@ export async function setupTestApp(): Promise<TestContext> {
     providerId: 'google-456',
   });
 
-  await storageService.writeJson(storageService.resolvePath('users', `${otherUserId}.json`), {
+  await authService.saveUser({
     id: otherUserId,
     username: 'other-user',
     email: 'other@example.com',
@@ -73,7 +73,7 @@ export async function setupTestApp(): Promise<TestContext> {
   const adminToken = jwtService.sign({ sub: adminId, username: 'admin-user' });
   const otherUserToken = jwtService.sign({ sub: otherUserId, username: 'other-user' });
 
-  return { app, jwtService, storageService, dataDir, userToken, adminToken, otherUserToken, userId, adminId, otherUserId };
+  return { app, jwtService, authService, dataDir, userToken, adminToken, otherUserToken, userId, adminId, otherUserId };
 }
 
 export async function teardownTestApp(ctx: TestContext): Promise<void> {
