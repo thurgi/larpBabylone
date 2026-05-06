@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: larpbabylone-data
+  namespace: larpbabylone
+  labels:
+    app.kubernetes.io/part-of: larpbabylone
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # 1 Gi largement suffisant pour ~50 utilisateurs
+      # (documents JSON, fichiers uploadés)
+      storage: 1Gi
+  # Décommenter et adapter si vous avez un StorageClass spécifique
+  # storageClassName: standard

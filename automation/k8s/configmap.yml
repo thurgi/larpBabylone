@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: larpbabylone-config
+  namespace: larpbabylone
+  labels:
+    app.kubernetes.io/part-of: larpbabylone
+data:
+  # ── Domaine public (à adapter) ─────────────────────────────────
+  # Remplacer par le vrai domaine en production
+  PUBLIC_DOMAIN: "larpbabylone.example.com"
+
+  # ── URLs construites à partir du domaine ───────────────────────
+  FRONTEND_URL: "https://larpbabylone.example.com"
+
+  # ── OAuth callbacks (passent par le reverse proxy /api/) ───────
+  DISCORD_CALLBACK_URL: "https://larpbabylone.example.com/api/auth/discord/callback"
+  GOOGLE_CALLBACK_URL: "https://larpbabylone.example.com/api/auth/google/callback"
+
+  # ── Backend ────────────────────────────────────────────────────
+  NODE_ENV: "production"
+  DATA_DIR: "/data"
+  ADMIN_USERNAME: "admin"
+
+  # ── Frontend (nginx) → backend ─────────────────────────────────
+  API_BACKEND_URL: "http://larpbabylone-backend:3001"
