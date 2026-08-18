@@ -7,8 +7,29 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
+      - auth
       - backend
       - frontend
+    networks:
+      - babylone
+
+  auth:
+    image: node:20-alpine
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    container_name: larpbabylone-auth
+    env_file:
+      - ../.env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    volumes:
+      - ../auth-service:/app
+      - ../data/auth:/data
+    environment:
+      - NODE_ENV=development
+      - AUTH_DATA_DIR=/data
+    working_dir: /app
+    command: npm run start:dev
     networks:
       - babylone
 
@@ -29,6 +50,8 @@ services:
       - DATA_DIR=/data
     working_dir: /app
     command: npm run start:dev
+    depends_on:
+      - auth
     networks:
       - babylone
 

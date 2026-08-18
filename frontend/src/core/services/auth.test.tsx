@@ -12,6 +12,18 @@ vi.mock('./http', () => ({
 
 import { api } from './http';
 
+// Empêche window.location.href d'échouer dans jsdom
+const originalLocation = window.location;
+beforeEach(() => {
+  Object.defineProperty(window, 'location', {
+    writable: true,
+    value: { ...originalLocation, href: '', origin: 'http://localhost:3000' },
+  });
+});
+afterEach(() => {
+  Object.defineProperty(window, 'location', { writable: true, value: originalLocation });
+});
+
 function TestConsumer() {
   const { user, loading, logout } = useAuth();
 
@@ -70,7 +82,7 @@ describe('AuthProvider', () => {
     });
   });
 
-  it('should call logout endpoint and clear user', async () => {
+  it('should call logout endpoint, clear user and redirect to auth-service', async () => {
     vi.mocked(api.get).mockResolvedValue({
       id: '1',
       username: 'bob',
@@ -95,5 +107,7 @@ describe('AuthProvider', () => {
     });
 
     expect(api.post).toHaveBeenCalledWith('/api/auth/logout');
+    expect(window.location.href).toContain('/auth/logout-redirect');
   });
 });
+

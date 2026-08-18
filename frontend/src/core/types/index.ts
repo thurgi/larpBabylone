@@ -5,6 +5,7 @@ export interface User {
   provider: 'discord' | 'google';
   providerId?: string;
   isGroupAdmin?: boolean;
+  isSuperAdmin?: boolean;
 }
 
 export interface Document {

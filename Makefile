@@ -15,17 +15,13 @@ DOCKER_COMPOSE = USER_ID=$(USER_ID) GROUP_ID=$(GROUP_ID) docker-compose -f autom
 DOCKER_COMPOSE_BUILD = docker-compose --env-file .env -f automation/docker-compose-build.yml
 DOCKER_RUN     = docker run --rm --user $(USER_ID):$(GROUP_ID)
 
-## Installer les dépendances (backend + frontend)
-install:
-	@echo "${COLOR_INFO}Installation des dépendances backend...${COLOR_RESET}"
-	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm ci
-	@echo "${COLOR_INFO}Installation des dépendances frontend...${COLOR_RESET}"
-	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm ci
+## Installer les dépendances (backend + frontend + auth-service)
+install: install-auth install-backend install-frontend
 
-fix-dependencies:
-	@echo "${COLOR_INFO}Fixing dependencies...${COLOR_RESET}"
-	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm audit fix --force
-# 	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm audit fix --force
+## Installer les dépendances auth-service uniquement
+install-auth:
+	@echo "${COLOR_INFO}Installation des dépendances auth-service...${COLOR_RESET}"
+	$(DOCKER_RUN) -v $(current_dir)/auth-service:/app -w /app $(NODE_IMAGE) npm install
 
 ## Installer les dépendances backend uniquement
 install-backend:
@@ -80,6 +76,7 @@ build:
 	@echo "${COLOR_INFO}Build de production...${COLOR_RESET}"
 	$(DOCKER_RUN) -v $(current_dir)/backend:/app -w /app $(NODE_IMAGE) npm run build
 	$(DOCKER_RUN) -v $(current_dir)/frontend:/app -w /app $(NODE_IMAGE) npm run build
+	$(DOCKER_RUN) -v $(current_dir)/auth-service:/app -w /app $(NODE_IMAGE) npm run build
 
 ## Lint du contrat OpenAPI
 lint-api:

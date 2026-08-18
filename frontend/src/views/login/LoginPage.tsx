@@ -4,6 +4,14 @@ import { Button, Card, Text } from '@gravity-ui/uikit';
 import { useAuth } from '@/core/services';
 import './LoginPage.scss';
 
+const AUTH_SERVICE_URL = import.meta.env.VITE_AUTH_SERVICE_URL || 'http://auth.localhost:3000';
+
+function buildLoginUrl(provider: 'discord' | 'google'): string {
+  // Transmet l'URL courante pour y revenir après le login
+  const returnTo = encodeURIComponent(window.location.href);
+  return `${AUTH_SERVICE_URL}/auth/${provider}?returnTo=${returnTo}`;
+}
+
 export function LoginPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -24,10 +32,10 @@ export function LoginPage() {
           Connectez-vous pour accéder à vos documents
         </Text>
         <div className="login-page__buttons">
-          <Button view="action" size="xl" width="max" href="/api/auth/discord">
+          <Button view="action" size="xl" width="max" href={buildLoginUrl('discord')}>
             Se connecter avec Discord
           </Button>
-          <Button view="outlined" size="xl" width="max" href="/api/auth/google">
+          <Button view="outlined" size="xl" width="max" href={buildLoginUrl('google')}>
             Se connecter avec Google
           </Button>
         </div>
