@@ -1,0 +1,21 @@
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testRegex": "test/.*\\.e2e-spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "transformIgnorePatterns": [
+    "node_modules/(?!uuid)"
+  ],
+  "moduleNameMapper": {
+    "^@larpbabylone/nest-user-module$": "<rootDir>/../shared/nest-user-module/src",
+    "^@larpbabylone/user-module$": "<rootDir>/../shared/user-module/src"
+  },
+  "collectCoverageFrom": [
+    "src/**/*.(t|j)s",
+    "!src/main.ts"
+  ],
+  "coverageDirectory": "../coverage/e2e"
+}

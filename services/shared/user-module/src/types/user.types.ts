@@ -1,4 +1,4 @@
-export type AuthProvider = 'discord' | 'google';
+export type AuthProvider = 'keycloak' | 'discord' | 'google';
 
 export interface UserPayload {
   id: string;

@@ -7,17 +7,23 @@ Application collaborative d'édition de documents avec gestion de versions et de
 | Service | Technologie | Port |
 |---------|------------|------|
 | **Backend** | NestJS (TypeScript) | 3001 |
-| **Frontend** | React + Vite + @gravity-ui/markdown-editor | 3000 |
+| **Frontend** | Angular (shell) | 3000 |
 | **Stockage** | Fichier plat (JSON + Markdown) | — |
-| **Auth** | OAuth2 (Discord, Google) + JWT | — |
+| **Auth** | Keycloak (OIDC) | — |
 
 ## Structure du projet
 
 ```
 larpBabylone/
-├── backend/ 
-│   ├── backend/               # API NestJS
-│   └── frontend/              # React + Vite
+├── services/
+│   ├── objects/               # API NestJS
+│   └── shared/
+│       ├── user-module/       # Contrats users/roles/permissions
+│       └── nest-user-module/  # Impl NestJS Keycloak
+├── front/
+│   ├── shell/                 # Shell Angular de connexion Keycloak
+│   └── shared/
+│       └── angular-user-module/ # Impl Angular Keycloak
 ├── data/                  # Stockage fichier plat (gitignored)
 ├── automation/ # stockage des fichiers pour le developpement local et la ci/cd
 │   ├── docker-compose.yml
@@ -49,12 +55,13 @@ make install
 ## Utilisation
 
 ```bash
+make install    # Installer les dépendances
+make build      # Build de production
 make start      # Démarrer les services
 make stop       # Arrêter les services
 make restart    # Redémarrer
 make logs       # Afficher les logs
 make test       # Lancer tous les tests
-make build      # Build de production
 make lint-api   # Valider le contrat OpenAPI
 make help       # Liste des commandes
 ```
@@ -65,8 +72,9 @@ Le fichier `openapi.yml` à la racine définit l'ensemble des endpoints REST de 
 
 ## Authentification
 
-Les utilisateurs se connectent via OAuth2 Discord ou Google. Un JWT est retourné après authentification.  
-Le username défini dans la variable `ADMIN_USERNAME` dispose de tous les droits (super-admin).
+Le shell frontend gère le flux SSO Keycloak.  
+Les services backend ne redirigent pas vers Keycloak : ils valident le token et renvoient `401/403` selon le cas.  
+Le username défini dans `ADMIN_USERNAME` conserve un bypass super-admin.
 
 ## Permissions
 

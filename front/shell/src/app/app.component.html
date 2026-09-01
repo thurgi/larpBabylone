@@ -1,0 +1,20 @@
+<main class="shell">
+  <h1>Babylone Shell</h1>
+  <p>Interface de test Keycloak via <code>front/shared/angular-user-module</code>.</p>
+
+  @if (loading) {
+    <p>Chargement de la session...</p>
+  } @else if (!user) {
+    <button type="button" (click)="login()">Se connecter avec Keycloak</button>
+  } @else {
+    <div class="card">
+      <p><strong>Utilisateur :</strong> {{ user.username }}</p>
+      <p><strong>ID :</strong> {{ user.id }}</p>
+      <p><strong>Email :</strong> {{ user.email || '-' }}</p>
+      <p><strong>Super admin :</strong> {{ isSuperAdmin() ? 'oui' : 'non' }}</p>
+      <p><strong>Roles :</strong> {{ user.roles.length > 0 ? user.roles.join(', ') : '-' }}</p>
+      <p><strong>Groupes :</strong> {{ user.groups.length > 0 ? user.groups.join(', ') : '-' }}</p>
+    </div>
+    <button type="button" class="secondary" (click)="logout()">Se déconnecter</button>
+  }
+</main>

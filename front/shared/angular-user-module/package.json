@@ -1,0 +1,25 @@
+{
+  "name": "@larpbabylone/angular-user-module",
+  "version": "1.0.0",
+  "description": "Implementation Angular des contrats user-module via Keycloak",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "@angular/common": "^22.1.4",
+    "@angular/core": "^22.1.4",
+    "rxjs": "^7.8.2"
+  },
+  "dependencies": {
+    "@larpbabylone/user-module": "file:../../../services/shared/user-module"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

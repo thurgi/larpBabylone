@@ -7,70 +7,93 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
-      - auth
-      - backend
-      - frontend
+      - service_objects
     networks:
       - babylone
 
-  auth:
-    image: node:20-alpine
+  service_objects:
+    hostname: larpbabylone_objects
+    image: node:24-alpine
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    container_name: larpbabylone-auth
+    container_name: larpbabylone_objects
     env_file:
-      - ../.env
+      - ${CURRENT_DIR}/.env
     dns:
       - 8.8.8.8
       - 8.8.4.4
     volumes:
-      - ../auth-service:/app
-      - ../data/auth:/data
-    environment:
-      - NODE_ENV=development
-      - AUTH_DATA_DIR=/data
-    working_dir: /app
-    command: npm run start:dev
-    networks:
-      - babylone
-
-  backend:
-    image: node:20-alpine
-    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    container_name: larpbabylone-backend
-    env_file:
-      - ../.env
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
-    volumes:
-      - ../backend:/app
-      - ../data:/data
+      - ${CURRENT_DIR}:/src
+      - ${CURRENT_DIR}/data:/data
     environment:
       - NODE_ENV=development
       - DATA_DIR=/data
-    working_dir: /app
+    working_dir: /src/services/objects
     command: npm run start:dev
-    depends_on:
-      - auth
     networks:
       - babylone
 
-  frontend:
-    image: node:20-alpine
+  shell:
+    image: node:24-alpine
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    container_name: larpbabylone-frontend
+    container_name: larpbabylone_frontend
+    hostname: larpbabylone_frontend
+    env_file:
+      - ${CURRENT_DIR}/.env
     volumes:
-      - ../frontend:/app
+      - ${CURRENT_DIR}:/app
     environment:
       - NODE_ENV=development
-    working_dir: /app
-    command: npm run dev -- --host 0.0.0.0 --port 3000
+    working_dir: /app/front/shell
+    command: >
+      npm run start -- --host 0.0.0.0 --port 80
+    networks:
+      - babylone
+
+  larpbabylone_keycloack:
+    image: quay.io/keycloak/keycloak:26.7.1
+    container_name: larpbabylone_keycloack
+    hostname: larpbabylone_keycloack
+    command: start-dev
+    ports:
+      - "15010:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://larpbabylone_keycloak_db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME: localhost
+    volumes:
+      - ${CURRENT_DIR}/data/keycloak/data:/opt/keycloak/data
+      - ${CURRENT_DIR}/data/keycloak/providers:/opt/keycloak/providers
+      - ${CURRENT_DIR}/data/keycloak/themes:/opt/keycloak/themes
+    networks:
+      - babylone
     depends_on:
-      - backend
+      larpbabylone_keycloak_postgres:
+        condition: service_healthy
+
+  larpbabylone_keycloak_postgres:
+    image: postgres:16-alpine
+    container_name: larpbabylone_keycloak_db
+    hostname: larpbabylone_keycloak_db
+    ports:
+      - "15011:5432"
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - ${CURRENT_DIR}/data/keycloak/db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U keycloak" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - babylone
 
 networks:
   babylone:
     name: babylone
-

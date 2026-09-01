@@ -1,0 +1,50 @@
+services:
+  larpbabylone_keycloack:
+    image: quay.io/keycloak/keycloak:26.7.1
+    container_name: larpbabylone_keycloack
+    hostname: larpbabylone_keycloack
+    command: start-dev
+    ports:
+      - "15010:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://larpbabylone_keycloak_db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME: localhost
+    volumes:
+      - ${CURRENT_DIR}/data/keycloak/data:/opt/keycloak/data
+      - ${CURRENT_DIR}/data/keycloak/providers:/opt/keycloak/providers
+      - ${CURRENT_DIR}/data/keycloak/themes:/opt/keycloak/themes
+    networks:
+      - babylone
+    depends_on:
+      larpbabylone_keycloak_postgres:
+        condition: service_healthy
+
+  larpbabylone_keycloak_postgres:
+    image: postgres:16-alpine
+    container_name: larpbabylone_keycloak_db
+    hostname: larpbabylone_keycloak_db
+    ports:
+      - "15011:5432"
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - ${CURRENT_DIR}/data/keycloak/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - babylone
+
+networks:
+  babylone:
+    name: babylone
+
